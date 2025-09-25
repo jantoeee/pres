@@ -2,8 +2,6 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [ main ]  # or whatever your default branch is
-  pull_request:
     branches: [ main ]
 
 jobs:
@@ -24,11 +22,14 @@ jobs:
       with:
         node-version: '18'
         cache: 'npm'
+        cache-dependency-path: 'presentatie/package-lock.json'
         
     - name: Install dependencies
+      working-directory: ./presentatie
       run: npm ci
       
     - name: Build Slidev
+      working-directory: ./presentatie
       run: npm run build
       
     - name: Setup Pages
@@ -37,7 +38,7 @@ jobs:
     - name: Upload artifact
       uses: actions/upload-pages-artifact@v3
       with:
-        path: './dist'
+        path: './presentatie/dist'
         
     - name: Deploy to GitHub Pages
       id: deployment
